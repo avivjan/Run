@@ -1,0 +1,26 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get"
+      ]
+    },
+    {
+      "type": "signalR",
+      "name": "signalrHub",
+      "hubName": "mySignalRHub",
+      "connectionStringSetting": "AzureSignalRConnectionString",
+      "direction": "out"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    }
+  ]
+}
