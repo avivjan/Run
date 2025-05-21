@@ -5,7 +5,10 @@ import os
 import json
 import uuid
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+def main(
+        req: func.HttpRequest,
+        signalrHub: func.Out[str]
+    ) -> func.HttpResponse:
     try:
         # Parse request body
         req_body = req.get_json()
@@ -40,6 +43,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # Insert event
         table_client.create_entity(entity=entity)
+        
+        
+        signalrHub.set(json.dumps({
+            'target': 'addEvent',
+            'arguments': [entity]
+        }))
 
         return func.HttpResponse(
             json.dumps({"eventId": event_id}),
