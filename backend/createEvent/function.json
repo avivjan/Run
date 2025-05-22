@@ -17,11 +17,11 @@
       "name": "$return"
     },
     {
-      "type": "signalRConnectionInfo",
-      "name": "connectionInfo",
+      "type": "signalR",
+      "name": "signalrHub",
       "hubName": "mySignalRHub",
       "connectionStringSetting": "AzureSignalRConnectionString",
-      "direction": "in"
+      "direction": "out"
     }
   ]
 }
