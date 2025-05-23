@@ -14,10 +14,19 @@ def main(
         req_body = req.get_json()
         timestamp = req_body.get("timestamp")
         trainer_id = req_body.get("trainerId", None)  # optional
-        status = req_body.get("status", "open")
+        status = req_body.get("status", "open") # optional
+        latitude = req_body.get("latitude")
+        longitude = req_body.get("longitude")
+        start_time = req_body.get("start_time", 0) # optional
+        track_length = req_body.get("track_length", 0) # optional
+        difficulty = req_body.get("difficulty", "beginner") # optional
+        type = req_body.get("type", "street") # optional
 
         if not timestamp:
             return func.HttpResponse("Missing required field: timestamp", status_code=400)
+        
+        if not latitude or not longitude:
+            return func.HttpResponse("Missing required field: latitude or longitude", status_code=400)
 
         # Generate unique event ID
         event_id = str(uuid.uuid4())
@@ -35,6 +44,12 @@ def main(
             "RowKey": event_id,
             "timestamp": timestamp,
             "status": status,
+            "latitude": latitude,
+            "longitude": longitude,
+            "start_time": start_time,
+            "track_length": track_length,
+            "difficulty": difficulty,
+            "type": type,
         }
 
         # Only include trainerId if provided
@@ -51,7 +66,7 @@ def main(
         }))
 
         return func.HttpResponse(
-            json.dumps({"eventId": event_id}),
+            json.dumps(entity),
             status_code=201,
             mimetype="application/json"
         )
