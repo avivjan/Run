@@ -7,7 +7,7 @@ import uuid
 
 def main(
         req: func.HttpRequest,
-        signalrHub: func.Out[str]
+        signalrMessages: func.Out[str]
     ) -> func.HttpResponse:
     try:
         # Parse request body
@@ -60,7 +60,7 @@ def main(
         table_client.create_entity(entity=entity)
         
         
-        signalrHub.set(json.dumps({
+        signalrMessages.set(json.dumps({
             'target': 'addEvent',
             'arguments': [entity]
         }))
