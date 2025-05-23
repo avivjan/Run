@@ -23,7 +23,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             except ValueError:
                 pass
         if not event_id:
-            return func.HttpResponse("Missing eventId", status_code=400)
+            return func.HttpResponse(
+                json.dumps({"error": "missing eventId"}),
+                status_code=400,
+                mimetype="application/json"
+            )
+            
 
         conn = os.getenv("AzureWebJobsStorage")
 
@@ -54,10 +59,15 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             )
         else:
             return func.HttpResponse(
-                f"event {event_id} not found",
-                status_code=404
+            json.dumps({"error": "event not found", "eventId": event_id}),
+            status_code=404,
+            mimetype="application/json"
             )
 
     except Exception as exc:
         logging.error(f"deleteEvent error: {exc}")
-        return func.HttpResponse("Something went wrong", status_code=500)
+        return func.HttpResponse(
+            json.dumps({"error": "something went wrong"}),
+            status_code=500,
+            mimetype="application/json"
+        )

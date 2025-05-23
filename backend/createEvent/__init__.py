@@ -23,10 +23,18 @@ def main(
         type = req_body.get("type", "street") # optional
 
         if not timestamp:
-            return func.HttpResponse("Missing required field: timestamp", status_code=400)
+            return func.HttpResponse(
+                json.dumps({"error": "missing timestamp"}),
+                status_code=400,
+                mimetype="application/json"
+            )
         
         if not latitude or not longitude:
-            return func.HttpResponse("Missing required field: latitude or longitude", status_code=400)
+            return func.HttpResponse(
+                json.dumps({"error": "missing latitude or longitude"}),
+                status_code=400,
+                mimetype="application/json"
+            )
 
         # Generate unique event ID
         event_id = str(uuid.uuid4())
@@ -73,4 +81,8 @@ def main(
 
     except Exception as e:
         logging.error(f"CreateEvent error: {e}")
-        return func.HttpResponse(f"Something went wrong: {str(e)}", status_code=500)
+        return func.HttpResponse(
+            json.dumps({"error": "something went wrong", "details": str(e)}),
+            status_code=500,
+            mimetype="application/json"
+        )

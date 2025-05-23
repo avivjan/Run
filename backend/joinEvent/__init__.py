@@ -14,8 +14,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         if not event_id or not userId:
             return func.HttpResponse(
-                "Missing required fields: eventId or userId",
-                status_code=400
+                json.dumps({"error": "missing eventId or userId"}),
+                status_code=400,
+                mimetype="application/json"
             )
 
         # Connect to RunnersInEvent table
@@ -43,4 +44,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     except Exception as e:
         logging.error(f"JoinEvent error: {e}")
-        return func.HttpResponse(f"Something went wrong: {str(e)}", status_code=500)
+        return func.HttpResponse(
+            json.dumps({"error": "something went wrong", "details": str(e)}),
+            status_code=500,
+            mimetype="application/json"
+        )
