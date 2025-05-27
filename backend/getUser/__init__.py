@@ -17,7 +17,11 @@ def main(req: func.HttpRequest, signalrHub: func.Out[str]) -> func.HttpResponse:
                 pass
 
         if not user_id:
-            return func.HttpResponse("Missing userId", status_code=400)
+            return func.HttpResponse(
+            json.dumps({"error": "missing userId"}),
+            status_code=400,
+            mimetype="application/json"
+        )
 
         # Connect to Azure Table Storage
         connection_string = os.getenv('AzureWebJobsStorage')
@@ -43,4 +47,8 @@ def main(req: func.HttpRequest, signalrHub: func.Out[str]) -> func.HttpResponse:
 
     except Exception as e:
         logging.error(f"Error in getUser: {e}")
-        return func.HttpResponse("Something went wrong", status_code=500)
+        return func.HttpResponse(
+            json.dumps({"error": "something went wrong", "details": str(e)}),
+            status_code=500,
+            mimetype="application/json"
+        )

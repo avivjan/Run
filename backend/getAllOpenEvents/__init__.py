@@ -16,10 +16,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         filter_str = "PartitionKey eq 'Event' and status eq 'open'"
         open_events = []
         for e in table.query_entities(filter_str):
-            event = {k: v for k, v in e.items()
-                     if k not in ("PartitionKey", "etag", "RowKey")}
-            event["eventId"] = e["RowKey"]
-            open_events.append(event)
+            #event = {k: v for k, v in e.items()
+            #         if k not in ("PartitionKey", "etag", "RowKey")}
+            #event["eventId"] = e["RowKey"]
+            open_events.append(e)
 
         return func.HttpResponse(
             json.dumps(open_events),
@@ -29,4 +29,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     except Exception as exc:
         logging.error(f"getAllOpenEvents error: {exc}")
-        return func.HttpResponse("Something went wrong", status_code=500)
+        return func.HttpResponse(
+            json.dumps({"error": "something went wrong", "details": str(e)}),
+            status_code=500,
+            mimetype="application/json"
+        )
