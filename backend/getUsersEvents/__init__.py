@@ -16,7 +16,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             except ValueError:
                 pass
         if not user_id:
-            return func.HttpResponse("Missing userId", status_code=400)
+            return func.HttpResponse(
+                json.dumps({"error": "missing userId"}),
+                status_code=400,
+                mimetype="application/json"
+            )
 
         # ---- table clients --------------------------------------------------
         conn_str = os.getenv("AzureWebJobsStorage")
@@ -54,4 +58,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     except Exception as exc:
         logging.error(f"getUsersEvents error: {exc}")
-        return func.HttpResponse("Something went wrong", status_code=500)
+        return func.HttpResponse(
+                json.dumps({"error": "something went wrong", "details": str(exc)}),
+                status_code=500,
+                mimetype="application/json"
+        )

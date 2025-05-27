@@ -18,11 +18,11 @@
     },
     {
       "type": "signalR",
-      "name": "signalrHub",
+      "name": "signalrMessages",
       "hubName": "mySignalRHub",
       "connectionStringSetting": "AzureSignalRConnectionString",
       "direction": "out"
-    }
+    } 
   ]
 }
 
