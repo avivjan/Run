@@ -21,9 +21,9 @@ def main(
         track_length = req_body.get("track_length", 0) # optional
         difficulty = req_body.get("difficulty", "beginner") # optional
         type = req_body.get("type", "street") # optional
-        event_name = req_body.get("name", f"Event {event_id}") # optional, default to "Event {event_id}"
+        name = req_body.get("name", "New Event") # optional, default to "Event {event_id}"
         track_id = req_body.get("trackId", None)  # optional, not used in this function
-        
+
         if not timestamp:
             return func.HttpResponse(
                 json.dumps({"error": "missing timestamp"}),
@@ -52,7 +52,7 @@ def main(
         entity = {
             "PartitionKey": "Event",
             "RowKey": event_id,
-            "name": event_name,
+            "name": name,
             "timestamp": timestamp,
             "status": status,
             "latitude": latitude,
