@@ -16,10 +16,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         filter_str = "PartitionKey eq 'Event' and status eq 'open'"
         open_events = []
         for e in table.query_entities(filter_str):
-            #event = {k: v for k, v in e.items()
-            #         if k not in ("PartitionKey", "etag", "RowKey")}
-            #event["eventId"] = e["RowKey"]
-            open_events.append(e)
+            event = {k: v for k, v in e.items()
+                    if k not in ("PartitionKey", "etag")}
+            event["eventId"] = e["RowKey"]
+            open_events.append(event)
 
         return func.HttpResponse(
             json.dumps(open_events),

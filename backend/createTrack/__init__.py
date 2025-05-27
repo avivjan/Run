@@ -12,12 +12,19 @@ def main(
         # Parse request body
         req_body = req.get_json()
         path = req_body.get("path")
-
         if not path:
-            return func.HttpResponse("Missing required field: path", status_code=400)
+            return func.HttpResponse(
+                json.dumps({"error": "Missing required field: path"}),
+                status_code=400,
+                mimetype="application/json"
+            )
         
         if len(path) == 0:
-            return func.HttpResponse("'path' can not be empty", status_code=400)
+            return func.HttpResponse(
+                json.dumps({"error": "'path' can not be empty"}),
+                status_code=400,
+                mimetype="application/json"
+            )
 
         # Generate unique track ID
         trackId = str(uuid.uuid4())
