@@ -63,9 +63,10 @@ def make_request(step, method, url, **kwargs):
     
     return resp, entry
 
-def validate_response(entry, validation_fn=None):
+def validate_response(entry, validation_fn=None, expected_status_range=(200, 299)):
     """Validate response status and optionally run custom validation"""
-    if not (200 <= entry["status_code"] < 300):
+    status_min, status_max = expected_status_range
+    if not (status_min <= entry["status_code"] <= status_max):
         raise AssertionError(f"{entry['step']} failed with status {entry['status_code']}")
     
     if validation_fn and callable(validation_fn):
@@ -100,13 +101,9 @@ def main():
 
     # 4. createTrack
     track_payload = {
-        "name": f"Test Track {uuid.uuid4().hex[:8]}",  # Unique name
-        "description": "A test track for API smoke test",
-        "difficulty": "intermediate",
-        "type": "trail",
-        "length": 5000,  # 5km
-        "coordinates": [
+        "path": [
             {"latitude": 32.0853, "longitude": 34.7818},  # Start point
+            {"latitude": 32.0853, "longitude": 34.7828},  # Middle point
             {"latitude": 32.0873, "longitude": 34.7838}   # End point
         ]
     }
@@ -130,11 +127,15 @@ def main():
     event_payload = {
         "timestamp": iso_now(),
         "trainerId": args.trainer_id,
-        "trackId": track_id,
+        "latitude": 32.0853,
+        "longitude": 34.7818,
         "name": f"Test Event {uuid.uuid4().hex[:8]}",  # Unique name
+        "status": "open",
         "start_time": int(datetime.now().timestamp()) + 3600,  # 1 hour from now
-        "difficulty": "intermediate",
-        "type": "trail"
+        "track_length": 5000,  # 5km
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": track_id
     }
     resp, entry = make_request(
         "createEvent", "POST",
@@ -142,7 +143,7 @@ def main():
         json=event_payload
     )
     validate_response(entry)
-    event_id = entry["response"].get("eventId")
+    event_id = entry["response"].get("RowKey")
     assert event_id, "Missing eventId in createEvent response"
 
     # 7. getAllOpenEvents
@@ -205,8 +206,8 @@ def main():
         f"{args.base_url}/joinEvent",
         json={"eventId": event_id, "userId": args.runner_id}
     )
-    # This should fail - expect 404 or similar
-    assert 400 <= entry["status_code"] < 500, "Joining deleted event should fail"
+    # This should fail with 4xx - use custom validation range
+    validate_response(entry, expected_status_range=(400, 499))
 
     # save results
     outfile = Path(f"api_test_results_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json")
@@ -217,7 +218,12 @@ def main():
     print("\nTest Summary:")
     slow_threshold_ms = 1000  # Consider requests over 1 second as slow
     for entry in log:
-        status = "✅" if 200 <= entry["status_code"] < 300 else "❌"
+        # For the join deleted event test, 4xx is a success
+        is_success = (
+            (200 <= entry["status_code"] < 300) or
+            (entry["step"] == "joinEvent (deleted event)" and 400 <= entry["status_code"] < 500)
+        )
+        status = "✅" if is_success else "❌"
         duration = f"{entry['duration_ms']}ms"
         if entry["duration_ms"] > slow_threshold_ms:
             duration += " ⚠️ SLOW"
