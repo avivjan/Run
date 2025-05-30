@@ -1,43 +1,77 @@
 import logging
+import json
+import os
+from datetime import datetime
+
 import azure.functions as func
 from azure.data.tables import TableClient
-import os
-import json
-from datetime import datetime
+from azure.core.exceptions import ResourceNotFoundError, ResourceExistsError
+
+USERS_TABLE      = "Users"
+EVENTS_TABLE     = "Events"
+RUNNERS_TABLE    = "RunnersInEvent"  
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
-        # Parse body
-        req_body = req.get_json()
-        event_id = req_body.get("eventId")
-        userId = req_body.get("userId")
+        body = req.get_json()
+        event_id = body.get("eventId")
+        user_id  = body.get("userId")
 
-        if not event_id or not userId:
+        if not event_id or not user_id:
             return func.HttpResponse(
                 json.dumps({"error": "missing eventId or userId"}),
                 status_code=400,
                 mimetype="application/json"
             )
 
-        # Connect to RunnersInEvent table
-        connection_string = os.getenv("AzureWebJobsStorage")
-        table_client = TableClient.from_connection_string(
-            conn_str=connection_string,
-            table_name="RunnersInEvent"
-        )
+        conn = os.getenv("AzureWebJobsStorage")
 
-        # Prepare entity
+        users_tbl = TableClient.from_connection_string(conn, USERS_TABLE)
+        try:
+            users_tbl.get_entity("User", user_id)
+        except ResourceNotFoundError:
+            return func.HttpResponse(
+                json.dumps({"error": f"user {user_id} not found"}),
+                status_code=404,
+                mimetype="application/json"
+            )
+
+        events_tbl = TableClient.from_connection_string(conn, EVENTS_TABLE)
+        try:
+            evt = events_tbl.get_entity("Event", event_id)
+        except ResourceNotFoundError:
+            return func.HttpResponse(
+                json.dumps({"error": f"event {event_id} not found"}),
+                status_code=404,
+                mimetype="application/json"
+            )
+
+        if evt.get("status") != "open":
+            return func.HttpResponse(
+                json.dumps({"error": "event is not open"}),
+                status_code=409,
+                mimetype="application/json"
+            )
+
+        runners_tbl = TableClient.from_connection_string(conn, RUNNERS_TABLE)
+
         entity = {
             "PartitionKey": event_id,
-            "RowKey": userId,
+            "RowKey": user_id,
             "joinedAt": datetime.utcnow().isoformat()
         }
 
-        # Insert entity
-        table_client.create_entity(entity=entity)
+        try:
+            runners_tbl.create_entity(entity=entity)
+        except ResourceExistsError:
+            return func.HttpResponse(
+                json.dumps({"message": "user already joined", "eventId": event_id, "userId": user_id}),
+                status_code=200,
+                mimetype="application/json"
+            )
 
         return func.HttpResponse(
-            json.dumps({"message": "user joined event", "eventId": event_id, "userId": userId}),
+            json.dumps({"message": "user joined event", "eventId": event_id, "userId": user_id}),
             status_code=201,
             mimetype="application/json"
         )
