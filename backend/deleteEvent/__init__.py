@@ -5,14 +5,16 @@ import os
 import azure.functions as func
 from azure.core.exceptions import ResourceNotFoundError
 from azure.data.tables import TableClient, TableServiceClient
+from shared.auth import require_auth
 
 
 EVENTS_TABLE   = "Events"
 RUNNERS_TABLE  = "RunnersInEvent"      # שנה אם השתמשת בשם אחר
 
 
+@require_auth
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    """Delete event + all runner links."""
+    """Delete event + all runner links. Does not delete associated tracks."""
     try:
         # ---------- get eventId ------------------------------------------------
         event_id = req.params.get("eventId")
@@ -29,12 +31,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="application/json"
             )
             
-
         conn = os.getenv("AzureWebJobsStorage")
 
         # ---------- delete from Events ----------------------------------------
         events_tbl = TableClient.from_connection_string(conn, EVENTS_TABLE)
         try:
+            # Get event first to preserve its data
+            event = events_tbl.get_entity(partition_key="Event", row_key=event_id)
+            # Then delete it
             events_tbl.delete_entity(partition_key="Event", row_key=event_id)
             event_deleted = True
         except ResourceNotFoundError:
