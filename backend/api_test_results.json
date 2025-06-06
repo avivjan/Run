@@ -1,0 +1,2090 @@
+[
+  {
+    "step": "verify auth required - createTrack",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/createTrack",
+    "payload": {
+      "path": []
+    },
+    "status_code": 401,
+    "duration_ms": 1972,
+    "response": {
+      "error": "No authorization token provided"
+    }
+  },
+  {
+    "step": "verify auth required - createEvent",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/createEvent",
+    "payload": null,
+    "status_code": 401,
+    "duration_ms": 556,
+    "response": {
+      "error": "No authorization token provided"
+    }
+  },
+  {
+    "step": "verify auth required - deleteEvent",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/deleteEvent",
+    "payload": {
+      "eventId": "test"
+    },
+    "status_code": 401,
+    "duration_ms": 547,
+    "response": {
+      "error": "No authorization token provided"
+    }
+  },
+  {
+    "step": "verify auth required - joinEvent",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/joinEvent",
+    "payload": {
+      "eventId": "test",
+      "userId": "test"
+    },
+    "status_code": 401,
+    "duration_ms": 560,
+    "response": {
+      "error": "No authorization token provided"
+    }
+  },
+  {
+    "step": "register (invalid password)",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/register",
+    "payload": {
+      "username": "testuser_5c2d0b2d",
+      "password": "short"
+    },
+    "status_code": 400,
+    "duration_ms": 539,
+    "response": {
+      "error": "Password must be at least 8 characters long"
+    }
+  },
+  {
+    "step": "register",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/register",
+    "payload": {
+      "username": "testuser_5c2d0b2d",
+      "password": "testpass123"
+    },
+    "status_code": 201,
+    "duration_ms": 1242,
+    "response": {
+      "message": "User registered successfully"
+    }
+  },
+  {
+    "step": "register (duplicate)",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/register",
+    "payload": {
+      "username": "testuser_5c2d0b2d",
+      "password": "testpass123"
+    },
+    "status_code": 409,
+    "duration_ms": 1001,
+    "response": {
+      "error": "Username already exists"
+    }
+  },
+  {
+    "step": "login (wrong password)",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/login",
+    "payload": {
+      "username": "testuser_5c2d0b2d",
+      "password": "wrongpass"
+    },
+    "status_code": 401,
+    "duration_ms": 962,
+    "response": {
+      "error": "Invalid credentials"
+    }
+  },
+  {
+    "step": "login",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/login",
+    "payload": {
+      "username": "testuser_5c2d0b2d",
+      "password": "testpass123"
+    },
+    "status_code": 200,
+    "duration_ms": 949,
+    "response": {
+      "message": "Login successful",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyXzVjMmQwYjJkIiwiZXhwIjoxNzQ5ODE4MTUzLCJpYXQiOjE3NDkyMTMzNTN9.UB2PVGRwmrHL7kZB00aKTio7QMcd7CFYyKzSdfkMNEE",
+      "username": "testuser_5c2d0b2d"
+    }
+  },
+  {
+    "step": "getUser runner",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getUser?userId=user123",
+    "payload": {
+      "userId": "user123"
+    },
+    "status_code": 200,
+    "duration_ms": 581,
+    "response": {
+      "FirstName": "Aviv",
+      "LastName": "Jan",
+      "Role": "Runner",
+      "userId": "user123"
+    }
+  },
+  {
+    "step": "getUser trainer",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getUser?userId=user456",
+    "payload": {
+      "userId": "user456"
+    },
+    "status_code": 200,
+    "duration_ms": 575,
+    "response": {
+      "FirstName": "Tal",
+      "LastName": "Cohen",
+      "Role": "Trainer",
+      "userId": "user456"
+    }
+  },
+  {
+    "step": "getAllTracks (initial)",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getAllTracks",
+    "payload": null,
+    "status_code": 200,
+    "duration_ms": 627,
+    "response": [
+      {
+        "path": [
+          [
+            31.1,
+            33.8
+          ],
+          [
+            31.1005,
+            33.8
+          ],
+          [
+            31.1005,
+            33.8005
+          ],
+          [
+            31.101,
+            33.8005
+          ],
+          [
+            31.101,
+            33.801
+          ],
+          [
+            31.1,
+            33.8
+          ]
+        ],
+        "trackId": "01ccc269-9b50-4253-8d00-818cf16d4403"
+      },
+      {
+        "path": [
+          [
+            32.0884,
+            34.78
+          ],
+          [
+            32.0825,
+            34.777
+          ],
+          [
+            32.0816,
+            34.779
+          ]
+        ],
+        "trackId": "13d44241-bb68-419b-b12e-544ccefb23bf"
+      },
+      {
+        "path": [
+          [
+            32.1,
+            34.8
+          ],
+          [
+            32.1005,
+            34.8
+          ],
+          [
+            32.1005,
+            34.8005
+          ],
+          [
+            32.101,
+            34.8005
+          ],
+          [
+            32.101,
+            34.801
+          ],
+          [
+            32.1,
+            34.8
+          ]
+        ],
+        "trackId": "18b96048-bebe-45af-b35c-3a58345dd27f"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "357b9a18-b06c-462c-a3a8-8bbf300f1969"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "4e507f0d-65b2-4f3d-b360-c68e0ccfe6e8"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "51afaa8d-00e6-4e86-8dfa-418435f53045"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "78692ffa-d708-4097-9cd8-e6938963de0e"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "798d4fdf-338c-466b-847b-373b189162d8"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "87c631bc-28f6-47cf-929e-8e94eb8586fb"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "95727f80-8f1b-4f36-be37-f687f3557990"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a134b54b-ddb5-469f-a415-66b2eb3c0499"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a16f03f7-93ae-47c9-8ecf-5fe6101425a1"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a37fd294-3eeb-424a-a833-15182b109100"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "aeda12d6-b152-4621-b809-e6e11690ab75"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "b3d94adf-1587-4aa8-a9d5-7c065fd361b7"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "b4b8560a-dc08-4eab-a488-35a9c78ea583"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "c9e504ce-755e-40b9-a744-4f41828e13e9"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "ca24646f-e30b-48d8-8b9e-b8d72c39d768"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "ce87a659-1d76-4aa0-8faa-5a7d8b7c2953"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "d32078bf-9b08-4fc8-a414-61f3a558d948"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "e9d1aee2-9f76-4df0-9553-d50858231a92"
+      },
+      {
+        "path": [
+          [
+            34.78,
+            32.0884
+          ],
+          [
+            34.777,
+            32.0825
+          ],
+          [
+            34.779,
+            32.0816
+          ]
+        ],
+        "trackId": "f333ee14-a22d-41a6-97d7-6462b3618c26"
+      }
+    ]
+  },
+  {
+    "step": "createTrack",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/createTrack",
+    "payload": {
+      "path": [
+        {
+          "latitude": 32.0853,
+          "longitude": 34.7818
+        },
+        {
+          "latitude": 32.0853,
+          "longitude": 34.7828
+        },
+        {
+          "latitude": 32.0873,
+          "longitude": 34.7838
+        }
+      ]
+    },
+    "status_code": 201,
+    "duration_ms": 599,
+    "response": {
+      "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d"
+    }
+  },
+  {
+    "step": "verify track exists",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getAllTracks",
+    "payload": null,
+    "status_code": 200,
+    "duration_ms": 570,
+    "response": [
+      {
+        "path": [
+          [
+            31.1,
+            33.8
+          ],
+          [
+            31.1005,
+            33.8
+          ],
+          [
+            31.1005,
+            33.8005
+          ],
+          [
+            31.101,
+            33.8005
+          ],
+          [
+            31.101,
+            33.801
+          ],
+          [
+            31.1,
+            33.8
+          ]
+        ],
+        "trackId": "01ccc269-9b50-4253-8d00-818cf16d4403"
+      },
+      {
+        "path": [
+          [
+            32.0884,
+            34.78
+          ],
+          [
+            32.0825,
+            34.777
+          ],
+          [
+            32.0816,
+            34.779
+          ]
+        ],
+        "trackId": "13d44241-bb68-419b-b12e-544ccefb23bf"
+      },
+      {
+        "path": [
+          [
+            32.1,
+            34.8
+          ],
+          [
+            32.1005,
+            34.8
+          ],
+          [
+            32.1005,
+            34.8005
+          ],
+          [
+            32.101,
+            34.8005
+          ],
+          [
+            32.101,
+            34.801
+          ],
+          [
+            32.1,
+            34.8
+          ]
+        ],
+        "trackId": "18b96048-bebe-45af-b35c-3a58345dd27f"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "357b9a18-b06c-462c-a3a8-8bbf300f1969"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "4e507f0d-65b2-4f3d-b360-c68e0ccfe6e8"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "51afaa8d-00e6-4e86-8dfa-418435f53045"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "78692ffa-d708-4097-9cd8-e6938963de0e"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "798d4fdf-338c-466b-847b-373b189162d8"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "87c631bc-28f6-47cf-929e-8e94eb8586fb"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "95727f80-8f1b-4f36-be37-f687f3557990"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a134b54b-ddb5-469f-a415-66b2eb3c0499"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a16f03f7-93ae-47c9-8ecf-5fe6101425a1"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a37fd294-3eeb-424a-a833-15182b109100"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "aeda12d6-b152-4621-b809-e6e11690ab75"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "b3d94adf-1587-4aa8-a9d5-7c065fd361b7"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "b4b8560a-dc08-4eab-a488-35a9c78ea583"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "c9e504ce-755e-40b9-a744-4f41828e13e9"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "ca24646f-e30b-48d8-8b9e-b8d72c39d768"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "ce87a659-1d76-4aa0-8faa-5a7d8b7c2953"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "d32078bf-9b08-4fc8-a414-61f3a558d948"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "e9d1aee2-9f76-4df0-9553-d50858231a92"
+      },
+      {
+        "path": [
+          [
+            34.78,
+            32.0884
+          ],
+          [
+            34.777,
+            32.0825
+          ],
+          [
+            34.779,
+            32.0816
+          ]
+        ],
+        "trackId": "f333ee14-a22d-41a6-97d7-6462b3618c26"
+      }
+    ]
+  },
+  {
+    "step": "getAllTracks (after creation)",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getAllTracks",
+    "payload": null,
+    "status_code": 200,
+    "duration_ms": 568,
+    "response": [
+      {
+        "path": [
+          [
+            31.1,
+            33.8
+          ],
+          [
+            31.1005,
+            33.8
+          ],
+          [
+            31.1005,
+            33.8005
+          ],
+          [
+            31.101,
+            33.8005
+          ],
+          [
+            31.101,
+            33.801
+          ],
+          [
+            31.1,
+            33.8
+          ]
+        ],
+        "trackId": "01ccc269-9b50-4253-8d00-818cf16d4403"
+      },
+      {
+        "path": [
+          [
+            32.0884,
+            34.78
+          ],
+          [
+            32.0825,
+            34.777
+          ],
+          [
+            32.0816,
+            34.779
+          ]
+        ],
+        "trackId": "13d44241-bb68-419b-b12e-544ccefb23bf"
+      },
+      {
+        "path": [
+          [
+            32.1,
+            34.8
+          ],
+          [
+            32.1005,
+            34.8
+          ],
+          [
+            32.1005,
+            34.8005
+          ],
+          [
+            32.101,
+            34.8005
+          ],
+          [
+            32.101,
+            34.801
+          ],
+          [
+            32.1,
+            34.8
+          ]
+        ],
+        "trackId": "18b96048-bebe-45af-b35c-3a58345dd27f"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "357b9a18-b06c-462c-a3a8-8bbf300f1969"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "4e507f0d-65b2-4f3d-b360-c68e0ccfe6e8"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "51afaa8d-00e6-4e86-8dfa-418435f53045"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "78692ffa-d708-4097-9cd8-e6938963de0e"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "798d4fdf-338c-466b-847b-373b189162d8"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "87c631bc-28f6-47cf-929e-8e94eb8586fb"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "95727f80-8f1b-4f36-be37-f687f3557990"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a134b54b-ddb5-469f-a415-66b2eb3c0499"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a16f03f7-93ae-47c9-8ecf-5fe6101425a1"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "a37fd294-3eeb-424a-a833-15182b109100"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "aeda12d6-b152-4621-b809-e6e11690ab75"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "b3d94adf-1587-4aa8-a9d5-7c065fd361b7"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "b4b8560a-dc08-4eab-a488-35a9c78ea583"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "c9e504ce-755e-40b9-a744-4f41828e13e9"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "ca24646f-e30b-48d8-8b9e-b8d72c39d768"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "ce87a659-1d76-4aa0-8faa-5a7d8b7c2953"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "d32078bf-9b08-4fc8-a414-61f3a558d948"
+      },
+      {
+        "path": [
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7818
+          },
+          {
+            "latitude": 32.0853,
+            "longitude": 34.7828
+          },
+          {
+            "latitude": 32.0873,
+            "longitude": 34.7838
+          }
+        ],
+        "trackId": "e9d1aee2-9f76-4df0-9553-d50858231a92"
+      },
+      {
+        "path": [
+          [
+            34.78,
+            32.0884
+          ],
+          [
+            34.777,
+            32.0825
+          ],
+          [
+            34.779,
+            32.0816
+          ]
+        ],
+        "trackId": "f333ee14-a22d-41a6-97d7-6462b3618c26"
+      }
+    ]
+  },
+  {
+    "step": "createEvent",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/createEvent",
+    "payload": {
+      "timestamp": "2025-06-06T12:35:57+00:00",
+      "trainerId": "user456",
+      "latitude": 32.0853,
+      "longitude": 34.7818,
+      "name": "Test Event 9f8ef9dc",
+      "status": "open",
+      "start_time": 1749216957,
+      "track_length": 5000,
+      "difficulty": "beginner",
+      "type": "street",
+      "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d"
+    },
+    "status_code": 201,
+    "duration_ms": 699,
+    "response": {
+      "PartitionKey": "Event",
+      "RowKey": "c500cc41-337f-494d-9d99-4fd074e64a8c",
+      "name": "Test Event 9f8ef9dc",
+      "timestamp": "2025-06-06T12:35:57+00:00",
+      "status": "open",
+      "latitude": 32.0853,
+      "longitude": 34.7818,
+      "start_time": 1749216957,
+      "track_length": 5000,
+      "difficulty": "beginner",
+      "type": "street",
+      "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d",
+      "trainerId": "user456"
+    }
+  },
+  {
+    "step": "verify event exists",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getAllOpenEvents",
+    "payload": null,
+    "status_code": 200,
+    "duration_ms": 578,
+    "response": [
+      {
+        "RowKey": "24aa897e-1192-46bd-9117-56a2d6a858e7",
+        "name": "Test Event 7c7020db",
+        "timestamp": "2025-05-30T14:51:55+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1748620315,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "b4b8560a-dc08-4eab-a488-35a9c78ea583",
+        "trainerId": "user456",
+        "eventId": "24aa897e-1192-46bd-9117-56a2d6a858e7"
+      },
+      {
+        "RowKey": "44e5afd6-6255-4f65-bff0-e565de703146",
+        "name": "TESTTttttttt",
+        "timestamp": "2025-06-05T11:02:40.764Z",
+        "status": "open",
+        "latitude": 32.08647655982989,
+        "longitude": 34.88728081401757,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "44e5afd6-6255-4f65-bff0-e565de703146"
+      },
+      {
+        "RowKey": "44f34182-1900-43fa-9158-199ebf29e4b1",
+        "name": "Test1",
+        "timestamp": "2025-06-05T11:11:37.606Z",
+        "status": "open",
+        "latitude": 32.16394912119905,
+        "longitude": 34.84700694285118,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "44f34182-1900-43fa-9158-199ebf29e4b1"
+      },
+      {
+        "RowKey": "6f661dbf-86cc-428b-b707-69b1f046650a",
+        "name": "Very good event",
+        "timestamp": "2025-06-05T11:09:35.729Z",
+        "status": "open",
+        "latitude": 32.06045706920413,
+        "longitude": 34.82401540099738,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "6f661dbf-86cc-428b-b707-69b1f046650a"
+      },
+      {
+        "RowKey": "8336f664-d2d6-42fd-a77d-109322af6fc2",
+        "name": "Good event",
+        "timestamp": "2025-06-05T11:08:02.547Z",
+        "status": "open",
+        "latitude": 32.02321634869827,
+        "longitude": 34.784873812671776,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "8336f664-d2d6-42fd-a77d-109322af6fc2"
+      },
+      {
+        "RowKey": "88c4539e-448b-4089-9930-6ed429556478",
+        "name": "Test Event a4afca3e",
+        "timestamp": "2025-05-30T14:47:23+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1748620043,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "aeda12d6-b152-4621-b809-e6e11690ab75",
+        "trainerId": "user456",
+        "eventId": "88c4539e-448b-4089-9930-6ed429556478"
+      },
+      {
+        "RowKey": "95704cd6-aacc-4b88-ad02-9c797b93c844",
+        "name": "TESTTEST",
+        "timestamp": "2025-06-05T10:51:39.683Z",
+        "status": "open",
+        "latitude": 32.123187346745866,
+        "longitude": 34.801892014158966,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "95704cd6-aacc-4b88-ad02-9c797b93c844"
+      },
+      {
+        "RowKey": "c500cc41-337f-494d-9d99-4fd074e64a8c",
+        "name": "Test Event 9f8ef9dc",
+        "timestamp": "2025-06-06T12:35:57+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1749216957,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d",
+        "trainerId": "user456",
+        "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c"
+      },
+      {
+        "RowKey": "dc0e0cad-6fcd-46ae-b9fc-114fd9bcfd66",
+        "name": "Event here",
+        "timestamp": "2025-06-05T11:05:27.369Z",
+        "status": "open",
+        "latitude": 32.089051181347926,
+        "longitude": 34.833869393072064,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "dc0e0cad-6fcd-46ae-b9fc-114fd9bcfd66"
+      }
+    ]
+  },
+  {
+    "step": "getAllOpenEvents",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getAllOpenEvents",
+    "payload": null,
+    "status_code": 200,
+    "duration_ms": 554,
+    "response": [
+      {
+        "RowKey": "24aa897e-1192-46bd-9117-56a2d6a858e7",
+        "name": "Test Event 7c7020db",
+        "timestamp": "2025-05-30T14:51:55+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1748620315,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "b4b8560a-dc08-4eab-a488-35a9c78ea583",
+        "trainerId": "user456",
+        "eventId": "24aa897e-1192-46bd-9117-56a2d6a858e7"
+      },
+      {
+        "RowKey": "44e5afd6-6255-4f65-bff0-e565de703146",
+        "name": "TESTTttttttt",
+        "timestamp": "2025-06-05T11:02:40.764Z",
+        "status": "open",
+        "latitude": 32.08647655982989,
+        "longitude": 34.88728081401757,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "44e5afd6-6255-4f65-bff0-e565de703146"
+      },
+      {
+        "RowKey": "44f34182-1900-43fa-9158-199ebf29e4b1",
+        "name": "Test1",
+        "timestamp": "2025-06-05T11:11:37.606Z",
+        "status": "open",
+        "latitude": 32.16394912119905,
+        "longitude": 34.84700694285118,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "44f34182-1900-43fa-9158-199ebf29e4b1"
+      },
+      {
+        "RowKey": "6f661dbf-86cc-428b-b707-69b1f046650a",
+        "name": "Very good event",
+        "timestamp": "2025-06-05T11:09:35.729Z",
+        "status": "open",
+        "latitude": 32.06045706920413,
+        "longitude": 34.82401540099738,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "6f661dbf-86cc-428b-b707-69b1f046650a"
+      },
+      {
+        "RowKey": "8336f664-d2d6-42fd-a77d-109322af6fc2",
+        "name": "Good event",
+        "timestamp": "2025-06-05T11:08:02.547Z",
+        "status": "open",
+        "latitude": 32.02321634869827,
+        "longitude": 34.784873812671776,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "8336f664-d2d6-42fd-a77d-109322af6fc2"
+      },
+      {
+        "RowKey": "88c4539e-448b-4089-9930-6ed429556478",
+        "name": "Test Event a4afca3e",
+        "timestamp": "2025-05-30T14:47:23+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1748620043,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "aeda12d6-b152-4621-b809-e6e11690ab75",
+        "trainerId": "user456",
+        "eventId": "88c4539e-448b-4089-9930-6ed429556478"
+      },
+      {
+        "RowKey": "95704cd6-aacc-4b88-ad02-9c797b93c844",
+        "name": "TESTTEST",
+        "timestamp": "2025-06-05T10:51:39.683Z",
+        "status": "open",
+        "latitude": 32.123187346745866,
+        "longitude": 34.801892014158966,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "95704cd6-aacc-4b88-ad02-9c797b93c844"
+      },
+      {
+        "RowKey": "c500cc41-337f-494d-9d99-4fd074e64a8c",
+        "name": "Test Event 9f8ef9dc",
+        "timestamp": "2025-06-06T12:35:57+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1749216957,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d",
+        "trainerId": "user456",
+        "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c"
+      },
+      {
+        "RowKey": "dc0e0cad-6fcd-46ae-b9fc-114fd9bcfd66",
+        "name": "Event here",
+        "timestamp": "2025-06-05T11:05:27.369Z",
+        "status": "open",
+        "latitude": 32.089051181347926,
+        "longitude": 34.833869393072064,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "dc0e0cad-6fcd-46ae-b9fc-114fd9bcfd66"
+      }
+    ]
+  },
+  {
+    "step": "joinEvent",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/joinEvent",
+    "payload": {
+      "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c",
+      "userId": "user123"
+    },
+    "status_code": 201,
+    "duration_ms": 627,
+    "response": {
+      "message": "user joined event",
+      "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c",
+      "userId": "user123"
+    }
+  },
+  {
+    "step": "getEventRegisteredUsers",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getEventRegisteredUsers?eventId=c500cc41-337f-494d-9d99-4fd074e64a8c",
+    "payload": {
+      "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c"
+    },
+    "status_code": 200,
+    "duration_ms": 631,
+    "response": [
+      {
+        "RowKey": "user123",
+        "FirstName": "Aviv",
+        "LastName": "Jan",
+        "Role": "Runner",
+        "userId": "user123"
+      }
+    ]
+  },
+  {
+    "step": "getUsersEvents",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getUsersEvents?userId=user123",
+    "payload": {
+      "userId": "user123"
+    },
+    "status_code": 200,
+    "duration_ms": 666,
+    "response": [
+      {
+        "RowKey": "44e5afd6-6255-4f65-bff0-e565de703146",
+        "name": "TESTTttttttt",
+        "timestamp": "2025-06-05T11:02:40.764Z",
+        "status": "open",
+        "latitude": 32.08647655982989,
+        "longitude": 34.88728081401757,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "44e5afd6-6255-4f65-bff0-e565de703146"
+      },
+      {
+        "RowKey": "44f34182-1900-43fa-9158-199ebf29e4b1",
+        "name": "Test1",
+        "timestamp": "2025-06-05T11:11:37.606Z",
+        "status": "open",
+        "latitude": 32.16394912119905,
+        "longitude": 34.84700694285118,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "44f34182-1900-43fa-9158-199ebf29e4b1"
+      },
+      {
+        "RowKey": "6f661dbf-86cc-428b-b707-69b1f046650a",
+        "name": "Very good event",
+        "timestamp": "2025-06-05T11:09:35.729Z",
+        "status": "open",
+        "latitude": 32.06045706920413,
+        "longitude": 34.82401540099738,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "6f661dbf-86cc-428b-b707-69b1f046650a"
+      },
+      {
+        "RowKey": "8336f664-d2d6-42fd-a77d-109322af6fc2",
+        "name": "Good event",
+        "timestamp": "2025-06-05T11:08:02.547Z",
+        "status": "open",
+        "latitude": 32.02321634869827,
+        "longitude": 34.784873812671776,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "8336f664-d2d6-42fd-a77d-109322af6fc2"
+      },
+      {
+        "RowKey": "95704cd6-aacc-4b88-ad02-9c797b93c844",
+        "name": "TESTTEST",
+        "timestamp": "2025-06-05T10:51:39.683Z",
+        "status": "open",
+        "latitude": 32.123187346745866,
+        "longitude": 34.801892014158966,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "95704cd6-aacc-4b88-ad02-9c797b93c844"
+      },
+      {
+        "RowKey": "dc0e0cad-6fcd-46ae-b9fc-114fd9bcfd66",
+        "name": "Event here",
+        "timestamp": "2025-06-05T11:05:27.369Z",
+        "status": "open",
+        "latitude": 32.089051181347926,
+        "longitude": 34.833869393072064,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "dc0e0cad-6fcd-46ae-b9fc-114fd9bcfd66"
+      },
+      {
+        "RowKey": "88c4539e-448b-4089-9930-6ed429556478",
+        "name": "Test Event a4afca3e",
+        "timestamp": "2025-05-30T14:47:23+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1748620043,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "aeda12d6-b152-4621-b809-e6e11690ab75",
+        "trainerId": "user456",
+        "eventId": "88c4539e-448b-4089-9930-6ed429556478"
+      },
+      {
+        "RowKey": "c500cc41-337f-494d-9d99-4fd074e64a8c",
+        "name": "Test Event 9f8ef9dc",
+        "timestamp": "2025-06-06T12:35:57+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1749216957,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d",
+        "trainerId": "user456",
+        "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c"
+      }
+    ]
+  },
+  {
+    "step": "negotiate",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/negotiate",
+    "payload": null,
+    "status_code": 200,
+    "duration_ms": 565,
+    "response": "{\n  \"url\": \"https://runappsigr.service.signalr.net/client/?hub=mysignalrhub\",\n  \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjgyNDE5ODA5MSJ9.eyJuYmYiOjE3NDkyMTMzNjEsImV4cCI6MTc0OTIxNjk2MSwiaWF0IjoxNzQ5MjEzMzYxLCJpc3MiOiJhenVyZS1zaWduYWxyIiwiYXVkIjoiaHR0cHM6Ly9ydW5hcHBzaWdyLnNlcnZpY2Uuc2lnbmFsci5uZXQvY2xpZW50Lz9odWI9bXlzaWduYWxyaHViIn0.PkdqJafK7quekZoaw0AacIZ3py6jJUWnVLCdgNEIy3c\"\n}"
+  },
+  {
+    "step": "deleteEvent",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/deleteEvent",
+    "payload": {
+      "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c"
+    },
+    "status_code": 200,
+    "duration_ms": 643,
+    "response": {
+      "message": "event deleted",
+      "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c"
+    }
+  },
+  {
+    "step": "getAllOpenEvents (after deletion)",
+    "method": "GET",
+    "url": "https://runfuncionapp.azurewebsites.net/api/getAllOpenEvents",
+    "payload": null,
+    "status_code": 200,
+    "duration_ms": 553,
+    "response": [
+      {
+        "RowKey": "24aa897e-1192-46bd-9117-56a2d6a858e7",
+        "name": "Test Event 7c7020db",
+        "timestamp": "2025-05-30T14:51:55+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1748620315,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "b4b8560a-dc08-4eab-a488-35a9c78ea583",
+        "trainerId": "user456",
+        "eventId": "24aa897e-1192-46bd-9117-56a2d6a858e7"
+      },
+      {
+        "RowKey": "44e5afd6-6255-4f65-bff0-e565de703146",
+        "name": "TESTTttttttt",
+        "timestamp": "2025-06-05T11:02:40.764Z",
+        "status": "open",
+        "latitude": 32.08647655982989,
+        "longitude": 34.88728081401757,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "44e5afd6-6255-4f65-bff0-e565de703146"
+      },
+      {
+        "RowKey": "44f34182-1900-43fa-9158-199ebf29e4b1",
+        "name": "Test1",
+        "timestamp": "2025-06-05T11:11:37.606Z",
+        "status": "open",
+        "latitude": 32.16394912119905,
+        "longitude": 34.84700694285118,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "44f34182-1900-43fa-9158-199ebf29e4b1"
+      },
+      {
+        "RowKey": "6f661dbf-86cc-428b-b707-69b1f046650a",
+        "name": "Very good event",
+        "timestamp": "2025-06-05T11:09:35.729Z",
+        "status": "open",
+        "latitude": 32.06045706920413,
+        "longitude": 34.82401540099738,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "6f661dbf-86cc-428b-b707-69b1f046650a"
+      },
+      {
+        "RowKey": "8336f664-d2d6-42fd-a77d-109322af6fc2",
+        "name": "Good event",
+        "timestamp": "2025-06-05T11:08:02.547Z",
+        "status": "open",
+        "latitude": 32.02321634869827,
+        "longitude": 34.784873812671776,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "8336f664-d2d6-42fd-a77d-109322af6fc2"
+      },
+      {
+        "RowKey": "88c4539e-448b-4089-9930-6ed429556478",
+        "name": "Test Event a4afca3e",
+        "timestamp": "2025-05-30T14:47:23+00:00",
+        "status": "open",
+        "latitude": 32.0853,
+        "longitude": 34.7818,
+        "start_time": 1748620043,
+        "track_length": 5000,
+        "difficulty": "beginner",
+        "type": "street",
+        "trackId": "aeda12d6-b152-4621-b809-e6e11690ab75",
+        "trainerId": "user456",
+        "eventId": "88c4539e-448b-4089-9930-6ed429556478"
+      },
+      {
+        "RowKey": "95704cd6-aacc-4b88-ad02-9c797b93c844",
+        "name": "TESTTEST",
+        "timestamp": "2025-06-05T10:51:39.683Z",
+        "status": "open",
+        "latitude": 32.123187346745866,
+        "longitude": 34.801892014158966,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "95704cd6-aacc-4b88-ad02-9c797b93c844"
+      },
+      {
+        "RowKey": "dc0e0cad-6fcd-46ae-b9fc-114fd9bcfd66",
+        "name": "Event here",
+        "timestamp": "2025-06-05T11:05:27.369Z",
+        "status": "open",
+        "latitude": 32.089051181347926,
+        "longitude": 34.833869393072064,
+        "start_time": 0,
+        "track_length": 0,
+        "difficulty": "beginner",
+        "type": "street",
+        "trainerId": "user123",
+        "eventId": "dc0e0cad-6fcd-46ae-b9fc-114fd9bcfd66"
+      }
+    ]
+  },
+  {
+    "step": "joinEvent (deleted event)",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/joinEvent",
+    "payload": {
+      "eventId": "c500cc41-337f-494d-9d99-4fd074e64a8c",
+      "userId": "user123"
+    },
+    "status_code": 404,
+    "duration_ms": 608,
+    "response": {
+      "error": "event c500cc41-337f-494d-9d99-4fd074e64a8c not found"
+    }
+  },
+  {
+    "step": "deleteTrack",
+    "method": "POST",
+    "url": "https://runfuncionapp.azurewebsites.net/api/deleteTrack",
+    "payload": {
+      "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d"
+    },
+    "status_code": 200,
+    "duration_ms": 605,
+    "response": {
+      "message": "Track deleted successfully",
+      "trackId": "d0ded622-9927-4c5b-99b9-7a42c4f0291d"
+    }
+  }
+]
