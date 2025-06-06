@@ -4,8 +4,9 @@ import os
 
 import azure.functions as func
 from azure.data.tables import TableClient
+from shared.auth import require_auth
 
-
+@require_auth
 def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         # Connect to Azure Table Storage

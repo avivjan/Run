@@ -6,11 +6,13 @@ from datetime import datetime
 import azure.functions as func
 from azure.data.tables import TableClient
 from azure.core.exceptions import ResourceNotFoundError, ResourceExistsError
+from shared.auth import require_auth
 
 USERS_TABLE      = "Users"
 EVENTS_TABLE     = "Events"
 RUNNERS_TABLE    = "RunnersInEvent"  
 
+@require_auth
 def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         body = req.get_json()
