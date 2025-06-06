@@ -4,7 +4,9 @@ from azure.data.tables import TableClient
 import os
 import json
 import uuid
+from shared.auth import require_auth
 
+@require_auth
 def main(
         req: func.HttpRequest
     ) -> func.HttpResponse:

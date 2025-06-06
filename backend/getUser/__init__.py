@@ -3,8 +3,9 @@ import azure.functions as func
 from azure.data.tables import TableClient
 import os
 import json
+from shared.auth import require_auth
 
-
+@require_auth
 def main(req: func.HttpRequest, signalrHub: func.Out[str]) -> func.HttpResponse:
     try:
         # Get userId from query string or request body

@@ -5,12 +5,14 @@ import os
 import azure.functions as func
 from azure.core.exceptions import ResourceNotFoundError
 from azure.data.tables import TableClient, TableServiceClient
+from shared.auth import require_auth
 
 
 EVENTS_TABLE   = "Events"
 RUNNERS_TABLE  = "RunnersInEvent"      # שנה אם השתמשת בשם אחר
 
 
+@require_auth
 def main(req: func.HttpRequest) -> func.HttpResponse:
     """Delete event + all runner links."""
     try:
