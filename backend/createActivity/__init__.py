@@ -10,8 +10,9 @@ def main(
         signalrMessages: func.Out[str]
     ) -> func.HttpResponse:
     try:
-        # Parse request body user_id, event_id, distance, duration, calories, start_time, stop_time, track_id
+        # Parse request body user_id, event_id, distance, duration, calories, start_time, stop_time, track_id and timestamp
         req_body = req.get_json()
+        timestamp = req_body.get("timestamp")
         user_id = req_body.get("userId")
         distance = req_body.get("distance", 0) # optional
         track_id = req_body.get("trackId")
@@ -20,6 +21,13 @@ def main(
         start_time = req_body.get("start_time") # optional
         stop_time = req_body.get("stop_time") # optional
         calories = req_body.get("calories", 0) # optional
+
+        if not timestamp:
+            return func.HttpResponse(
+                json.dumps({"error": "missing timestamp"}),
+                status_code=400,
+                mimetype="application/json"
+            )
 
         if not user_id:
             return func.HttpResponse(
