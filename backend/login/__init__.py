@@ -50,7 +50,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         # Get user from table
         table_client = get_table_client()
-        user = table_client.get_entity(partition_key="user", row_key=username)
+        logging.info(f"Attempting to retrieve user: {username}")
+        user = table_client.get_entity(partition_key="User", row_key=username)
+        logging.info("User found in database")
 
         # Verify password
         is_valid = bcrypt.checkpw(
@@ -59,6 +61,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         )
 
         if not is_valid:
+            logging.warning(f"Invalid password attempt for user: {username}")
             return func.HttpResponse(
                 json.dumps({"error": "Invalid credentials"}),
                 mimetype="application/json",
@@ -67,6 +70,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # Generate JWT token
         token = generate_token(username)
+        logging.info(f"Login successful for user: {username}")
 
         return func.HttpResponse(
             json.dumps({
@@ -79,7 +83,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     except Exception as e:
-        logging.error(f"Error during login: {str(e)}")
+        logging.error(f"Error during login for user '{username}': {str(e)}")
         return func.HttpResponse(
             json.dumps({"error": "Invalid credentials"}),
             mimetype="application/json",
