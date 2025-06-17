@@ -76,7 +76,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             json.dumps({
                 "message": "Login successful",
                 "token": token,
-                "username": username
+                "username": username,
+                "user_id": user['RowKey'],
             }),
             mimetype="application/json",
             status_code=200
