@@ -10,67 +10,59 @@ def main(
         signalrMessages: func.Out[str]
     ) -> func.HttpResponse:
     try:
-        # Parse request body user_id, event_id, distance, duration, calories, start_time, stop_time, track_id and timestamp
+        # Parse request body
         req_body = req.get_json()
         timestamp = req_body.get("timestamp")
         user_id = req_body.get("userId")
-        distance = req_body.get("distance", 0) # optional
+        distance = req_body.get("distance", 0)
         track_id = req_body.get("trackId")
-        event_id = req_body.get("eventId", None)  # optional
-        duration = req_body.get("duration", 0) # optional
-        start_time = req_body.get("start_time") # optional
-        stop_time = req_body.get("stop_time") # optional
-        calories = req_body.get("calories", 0) # optional
+        event_id = req_body.get("eventId", None)
+        duration = req_body.get("duration", 0)
+        start_time = req_body.get("start_time")
+        stop_time = req_body.get("stop_time")
+        calories = req_body.get("calories", 0)
+        avg_pace = req_body.get("averagePace", 0)
+        avg_speed = req_body.get("averageSpeed", 0)
 
-        if not timestamp:
+        # Validate required fields
+        if not all([timestamp, user_id, track_id, start_time, stop_time]):
+            missing_fields = []
+            if not timestamp: missing_fields.append("timestamp")
+            if not user_id: missing_fields.append("userId")
+            if not track_id: missing_fields.append("trackId")
+            if not start_time: missing_fields.append("start_time")
+            if not stop_time: missing_fields.append("stop_time")
+            
             return func.HttpResponse(
-                json.dumps({"error": "missing timestamp"}),
-                status_code=400,
-                mimetype="application/json"
-            )
-
-        if not user_id:
-            return func.HttpResponse(
-                json.dumps({"error": "missing userId"}),
-                status_code=400,
-                mimetype="application/json"
-            )
-        
-        if not track_id:
-            return func.HttpResponse(
-                json.dumps({"error": "missing trackId"}),
-                status_code=400,
-                mimetype="application/json"
-            )
-        
-        if not start_time or not stop_time:
-            return func.HttpResponse(
-                json.dumps({"error": "missing start time or stop time"}),
+                json.dumps({"error": f"Missing required fields: {', '.join(missing_fields)}"}),
                 status_code=400,
                 mimetype="application/json"
             )
 
-        # Generate unique event ID
+        # Generate unique activity ID
         activity_id = str(uuid.uuid4())
 
-        # Connect to Events table
+        # Connect to Activities table
         connection_string = os.getenv("AzureWebJobsStorage")
         table_client = TableClient.from_connection_string(
             conn_str=connection_string,
             table_name="Activities"
         )
 
-        # Create event entity
+        # Create activity entity
         entity = {
-            "PartitionKey": "Activity",
+            "PartitionKey": user_id,  # Changed from "Activity" to user_id
             "RowKey": activity_id,
             "start_time": start_time,
             "stop_time": stop_time,
-            "distance": distance,
-            "duration": duration,
-            "calories": calories,
-            "userId": user_id,
-            "trackId": track_id
+            "distance": float(distance),  # Ensure numeric types
+            "duration": int(duration),
+            "calories": float(calories),
+            "trackId": track_id,
+            "timestamp": timestamp,
+            "averagePace": float(avg_pace),
+            "averageSpeed": float(avg_speed),
+            "type": "Free Run"
         }
 
         # Only include eventId if provided
@@ -80,7 +72,7 @@ def main(
         # Insert activity
         table_client.create_entity(entity=entity)
         
-        
+        # Send SignalR message
         signalrMessages.set(json.dumps({
             'target': 'addActivity',
             'arguments': [entity]
