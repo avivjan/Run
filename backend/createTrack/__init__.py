@@ -15,7 +15,7 @@ def main(
         req_body = req.get_json()
         path = req_body.get("path")
         name = req_body.get("name", "New Track")  # optional, default to "New Track"
-        userId = req_body.get("userId")
+        user_id = req_body.get("userId")
         if not path:
             logging.error("Missing required field: path")
             return func.HttpResponse(
@@ -28,6 +28,14 @@ def main(
             logging.error("path can not be empty")
             return func.HttpResponse(
                 json.dumps({"error": "'path' can not be empty"}),
+                status_code=400,
+                mimetype="application/json"
+            )
+        
+        if not user_id:  # Add this check
+            logging.error("Missing required field: userId")
+            return func.HttpResponse(
+                json.dumps({"error": "Missing required field: userId"}),
                 status_code=400,
                 mimetype="application/json"
             )
@@ -48,7 +56,7 @@ def main(
             "RowKey": trackId,
             "path": json.dumps(path),
             "name": name,
-            "userId": userId,
+            "userId": user_id,
         }
 
         # Insert track
