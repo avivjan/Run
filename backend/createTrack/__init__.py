@@ -15,6 +15,7 @@ def main(
         req_body = req.get_json()
         path = req_body.get("path")
         if not path:
+            logging.error("Missing required field: path")
             return func.HttpResponse(
                 json.dumps({"error": "Missing required field: path"}),
                 status_code=400,
@@ -22,6 +23,7 @@ def main(
             )
         
         if len(path) == 0:
+            logging.error("path can not be empty")
             return func.HttpResponse(
                 json.dumps({"error": "'path' can not be empty"}),
                 status_code=400,
@@ -47,7 +49,7 @@ def main(
 
         # Insert track
         table_client.create_entity(entity=entity)
-
+        logging.info(f"Track created with ID: {trackId}")
         return func.HttpResponse(
             json.dumps({"trackId": trackId}),
             status_code=201,
