@@ -41,7 +41,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 "trackId": entity.get("RowKey"),
                 "name": entity.get("name"),
                 "path": entity.get("path"),  # Should be a list of [lng, lat] pairs
-                "created": entity.get("created"),
+                "timestamp": entity.get("timestamp"),
                 # Add more fields as needed
             })
 

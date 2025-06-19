@@ -16,6 +16,8 @@ def main(
         path = req_body.get("path")
         name = req_body.get("name", "New Track")  # optional, default to "New Track"
         user_id = req_body.get("userId")
+        timestamp = req_body.get("timestamp")
+
         if not path:
             logging.error("Missing required field: path")
             return func.HttpResponse(
@@ -57,6 +59,7 @@ def main(
             "path": json.dumps(path),
             "name": name,
             "userId": user_id,
+            "timestamp": timestamp
         }
 
         # Insert track
