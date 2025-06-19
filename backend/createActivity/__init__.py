@@ -33,6 +33,7 @@ def main(
             if not start_time: missing_fields.append("start_time")
             if not stop_time: missing_fields.append("stop_time")
             
+            logging.error(f"Missing fields: {', '.join(missing_fields)}")
             return func.HttpResponse(
                 json.dumps({"error": f"Missing required fields: {', '.join(missing_fields)}"}),
                 status_code=400,
@@ -74,7 +75,7 @@ def main(
         
         # Send SignalR message
         signalrMessages.set(json.dumps({
-            'target': 'addActivity',
+            'target': 'createActivity',
             'arguments': [entity]
         }))
 
