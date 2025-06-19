@@ -14,6 +14,8 @@ def main(
         # Parse request body
         req_body = req.get_json()
         path = req_body.get("path")
+        name = req_body.get("name", "New Track")  # optional, default to "New Track"
+        userId = req_body.get("userId")
         if not path:
             logging.error("Missing required field: path")
             return func.HttpResponse(
@@ -45,6 +47,8 @@ def main(
             "PartitionKey": "Track",
             "RowKey": trackId,
             "path": json.dumps(path),
+            "name": name,
+            "userId": userId,
         }
 
         # Insert track
