@@ -22,6 +22,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             status_code=400
         )
 
+    logging.info(f"Looking for tracks for user_id: {user_id}")
+
     # Azure Table Storage connection
     connection_string = os.getenv("AzureWebJobsStorage")
     table_name = "RunningTracks"
@@ -30,20 +32,25 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         service = TableServiceClient.from_connection_string(conn_str=connection_string)
         table_client = service.get_table_client(table_name=table_name)
 
-        # Query: PartitionKey eq user_id (assuming PartitionKey is userId)
-        filter_query = f"PartitionKey eq '{user_id}'"
+        # Now try the query
+        filter_query = "PartitionKey eq 'Track' and userId eq '{}'".format(user_id)
+        logging.info(f"Using filter query: {filter_query}")
         entities = table_client.query_entities(query_filter=filter_query)
 
+        query_count = 0
         tracks = []
+        
         for entity in entities:
-            # Adjust these fields based on your schema
+            query_count += 1
+            logging.info(f"Query result {query_count}: {dict(entity)}")
             tracks.append({
                 "trackId": entity.get("RowKey"),
-                "name": entity.get("name"),
-                "path": entity.get("path"),  # Should be a list of [lng, lat] pairs
-                "created": entity.get("created"),
-                # Add more fields as needed
+                "name": entity.get("name", "Unnamed Track"),
+                "path": json.loads(entity.get("path", "[]")),
+                "timestamp": entity.get("timestamp"),
             })
+
+        logging.info(f"Query returned {query_count} entities")
 
         return func.HttpResponse(
             json.dumps(tracks),
