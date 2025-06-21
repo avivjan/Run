@@ -6,7 +6,7 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["delete", "post"]
+      "methods": ["post"]
     },
     {
       "type": "http",
@@ -21,4 +21,4 @@
       "direction": "out"
     }
   ]
-}
+} 
