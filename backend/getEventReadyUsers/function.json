@@ -6,19 +6,12 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["delete", "post"]
+      "methods": ["get"]
     },
     {
       "type": "http",
       "direction": "out",
       "name": "$return"
-    },
-    {
-      "type": "signalR",
-      "name": "signalrMessages",
-      "hubName": "mySignalRHub",
-      "connectionStringSetting": "AzureSignalRConnectionString",
-      "direction": "out"
     }
   ]
-}
+} 

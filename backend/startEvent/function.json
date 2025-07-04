@@ -6,7 +6,8 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["delete", "post"]
+      "methods": ["post"],
+      "route": "startEvent"
     },
     {
       "type": "http",
@@ -21,4 +22,4 @@
       "direction": "out"
     }
   ]
-}
+} 
