@@ -26,6 +26,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     # Azure Table Storage connection
     connection_string = os.getenv("AzureWebJobsStorage")
+    if not connection_string:
+        raise ValueError("AzureWebJobsStorage connection string not found")
     table_name = "RunningTracks"
 
     try:

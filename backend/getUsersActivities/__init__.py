@@ -18,6 +18,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # Initialize TableServiceClient and TableClient
         connection_string = os.environ["AzureWebJobsStorage"]
+        if not connection_string:
+            raise ValueError("AzureWebJobsStorage connection string not found")
         table_service_client = TableServiceClient.from_connection_string(connection_string)
         table_name = "Activities"
 
@@ -54,7 +56,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 'averagePace': float(activity['averagePace']) if 'averagePace' in activity else None,
                 'averageSpeed': float(activity['averageSpeed']) if 'averageSpeed' in activity else None,
                 'calories': float(activity['calories']) if 'calories' in activity else None,
-                'trackId': activity['trackId'],
+                'trackId': activity['trackId'] if 'trackId' in activity else None,
                 'startTime': activity['start_time'],
                 'stopTime': activity['stop_time'],
                 'eventId': activity['eventId'] if 'eventId' in activity else None,
