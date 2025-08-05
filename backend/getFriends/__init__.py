@@ -8,8 +8,11 @@ from shared.auth import require_auth
 @require_auth
 def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
-        user = getattr(req, 'user', {})
-        user_id = user.get('username')
+        user_id = req.params.get('id')
+
+        if not user_id:
+            user = getattr(req, 'user', {})
+            user_id = user.get('username')
 
         connection_string = os.getenv('AzureWebJobsStorage')
         table_client = TableClient.from_connection_string(

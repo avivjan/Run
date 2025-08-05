@@ -9,9 +9,11 @@ from shared.auth import require_auth
 @require_auth
 def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
+        user_id = req.params.get('id')
         # Get user from JWT token
-        user = getattr(req, 'user', {})
-        user_id = user.get('username')
+        if not user_id:
+            user = getattr(req, 'user', {})
+            user_id = user.get('username')
         if not user_id:
             return func.HttpResponse(
                 json.dumps({"error": "User not authenticated"}),
