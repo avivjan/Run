@@ -13,7 +13,7 @@ EVENTS_TABLE     = "Events"
 RUNNERS_TABLE    = "RunnersInEvent"
 
 @require_auth
-def main(req: func.HttpRequest) -> func.HttpResponse:
+def main(req: func.HttpRequest, signalrMessages: func.Out[str]) -> func.HttpResponse:
     try:
         body = req.get_json()
         leaving_user_id = body.get("leavingUserId")
@@ -99,6 +99,15 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 status_code=200,
                 mimetype="application/json"
             )
+        
+        signalr_message = {
+            'target': 'updateEvent',
+            'arguments': [{
+                'eventId': event_id,
+            }]
+        }
+
+        signalrMessages.set(json.dumps(signalr_message))
 
         return func.HttpResponse(
             json.dumps({"message": "user left event", "eventId": event_id, "userId": leaving_user_id}),
