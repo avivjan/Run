@@ -23,6 +23,7 @@ def main(
         calories = req_body.get("calories", 0)
         avg_pace = req_body.get("averagePace", 0)
         avg_speed = req_body.get("averageSpeed", 0)
+        type = req_body.get("type", "Free Run")
 
         # Validate required fields
         if not all([timestamp, user_id, track_id, start_time, stop_time]):
@@ -63,7 +64,7 @@ def main(
             "timestamp": timestamp,
             "averagePace": float(avg_pace),
             "averageSpeed": float(avg_speed),
-            "type": "Free Run"
+            "type": type
         }
 
         # Only include eventId if provided
