@@ -85,7 +85,7 @@ def main(req: func.HttpRequest, signalrMessages: func.Out[str]) -> func.HttpResp
                     logging.error(f"Error removing user {registered_user_id} from event {event_id}: {e}")
 
         # Update event status to started
-        # event['status'] = 'started'
+        event['status'] = 'started'
         event['startedAt'] = datetime.utcnow().isoformat()
         events_tbl.update_entity(entity=event, mode=UpdateMode.REPLACE)
 
