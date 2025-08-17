@@ -17,6 +17,7 @@ def main(req: func.HttpRequest, signalrMessages: func.Out[str]) -> func.HttpResp
         user_id = body.get("userId")
         latitude = body.get("latitude")
         longitude = body.get("longitude")
+        altitude = body.get("altitude")
         speed = body.get("speed", 0)
         heading = body.get("heading", 0)
         distance = body.get("distance", 0)
@@ -42,6 +43,7 @@ def main(req: func.HttpRequest, signalrMessages: func.Out[str]) -> func.HttpResp
             "userId": user_id,
             "latitude": float(latitude),
             "longitude": float(longitude),
+            "altitude": float(altitude) if altitude is not None else None,
             "speed": float(speed),
             "heading": float(heading),
             "distance": float(distance),
@@ -59,6 +61,7 @@ def main(req: func.HttpRequest, signalrMessages: func.Out[str]) -> func.HttpResp
                 'userId': user_id,
                 'latitude': latitude,
                 'longitude': longitude,
+                'altitude': altitude,
                 'speed': speed,
                 'heading': heading,
                 'distance': distance,
