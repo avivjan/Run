@@ -45,6 +45,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     'userId': user_id,
                     'latitude': float(position['latitude']),
                     'longitude': float(position['longitude']),
+                    'altitude': float(position['altitude']) if position.get('altitude') is not None else None,
                     'speed': float(position['speed']),
                     'heading': float(position['heading']),
                     'distance': float(position['distance']),
