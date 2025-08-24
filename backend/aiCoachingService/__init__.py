@@ -490,6 +490,10 @@ def analyze_progress_trend(activities: List[Dict]) -> Dict[str, Any]:
     recent = activities[-4:]
     older = activities[-8:-4] if len(activities) >= 8 else activities[:-4]
     
+    # Check if we have enough data for comparison
+    if len(older) == 0:
+        return {"trend": "insufficient_data", "recent_improvement": "none"}
+    
     recent_avg_distance = sum(a.get('distance', 0) for a in recent) / len(recent)
     older_avg_distance = sum(a.get('distance', 0) for a in older) / len(older)
     
