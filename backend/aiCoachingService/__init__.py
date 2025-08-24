@@ -2,24 +2,70 @@ import azure.functions as func
 import logging
 import json
 import os
-import openai
+from openai import AzureOpenAI
 from datetime import datetime, timedelta
 from typing import Dict, List, Any
 
-# Configure Azure OpenAI
-openai.api_type = "azure"
-openai.api_key = os.environ.get("AZURE_OPENAI_API_KEY")
-openai.api_base = os.environ.get("AZURE_OPENAI_ENDPOINT")
-openai.api_version = "2023-12-01-preview"
+# Initialize Azure OpenAI client
+def get_openai_client():
+    """Get OpenAI client with error handling"""
+    try:
+        endpoint = os.environ.get("AZURE_OPENAI_ENDPOINT")
+        api_key = os.environ.get("AZURE_OPENAI_API_KEY")
+        
+        if not endpoint or not api_key:
+            logging.error("Missing OpenAI configuration")
+            return None
+            
+        return AzureOpenAI(
+            azure_endpoint=endpoint,
+            api_key=api_key,
+            api_version="2023-12-01-preview"
+        )
+    except Exception as e:
+        logging.error(f"Error initializing OpenAI client: {str(e)}")
+        return None
+
+# Global client variable
+client = None
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('AI Coaching Service function processed a request.')
+    
+    # Initialize OpenAI client
+    global client
+    if client is None:
+        client = get_openai_client()
+        if client is None:
+            return func.HttpResponse(
+                json.dumps({"error": "Failed to initialize OpenAI client"}),
+                status_code=500,
+                mimetype="application/json"
+            )
+    
+    # Debug: Log environment variables (without exposing sensitive data)
+    logging.info(f"AZURE_OPENAI_API_KEY present: {bool(os.environ.get('AZURE_OPENAI_API_KEY'))}")
+    logging.info(f"AZURE_OPENAI_ENDPOINT present: {bool(os.environ.get('AZURE_OPENAI_ENDPOINT'))}")
+    logging.info(f"AZURE_OPENAI_API_VERSION: {os.environ.get('AZURE_OPENAI_API_VERSION')}")
+    
+    # Debug: Check if this is a test request
+    if req.method == 'GET':
+        # Check for specific test type
+        test_type = req.params.get('test')
+        if test_type == 'basic':
+            return test_basic_function()
+        elif test_type == 'config':
+            return test_openai_configuration()
+        else:
+            return test_basic_function()
     
     try:
         # Get request body
         req_body = req.get_json()
         user_id = req_body.get('userId')
         request_type = req_body.get('type', 'recommendation')  # 'recommendation' or 'training_plan'
+        
+        logging.info(f"Request type: {request_type}, User ID: {user_id}")
         
         if not user_id:
             return func.HttpResponse(
@@ -34,6 +80,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         else:
             result = generate_ai_recommendation(user_id, req_body)
         
+        logging.info(f"Successfully generated {request_type} for user {user_id}")
         return func.HttpResponse(
             json.dumps(result),
             status_code=200,
@@ -42,8 +89,109 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         
     except Exception as e:
         logging.error(f"Error in aiCoachingService: {str(e)}")
+        logging.error(f"Exception type: {type(e).__name__}")
+        import traceback
+        logging.error(f"Full traceback: {traceback.format_exc()}")
         return func.HttpResponse(
-            json.dumps({"error": "Internal server error"}),
+            json.dumps({"error": f"Internal server error: {str(e)}"}),
+            status_code=500,
+            mimetype="application/json"
+        )
+
+def test_basic_function():
+    """
+    Basic test function to verify the function is working
+    """
+    try:
+        logging.info("Basic function test - function is working")
+        return func.HttpResponse(
+            json.dumps({
+                "status": "success",
+                "message": "Basic function test passed",
+                "timestamp": datetime.now().isoformat(),
+                "environment_vars": {
+                    "openai_key_present": bool(os.environ.get("AZURE_OPENAI_API_KEY")),
+                    "openai_endpoint_present": bool(os.environ.get("AZURE_OPENAI_ENDPOINT"))
+                }
+            }),
+            status_code=200,
+            mimetype="application/json"
+        )
+    except Exception as e:
+        logging.error(f"Basic test failed: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({
+                "status": "error",
+                "error": str(e),
+                "error_type": type(e).__name__
+            }),
+            status_code=500,
+            mimetype="application/json"
+        )
+
+def test_openai_configuration():
+    """
+    Test function to verify OpenAI configuration
+    """
+    try:
+        logging.info("Testing OpenAI configuration...")
+        
+        # Check environment variables
+        api_key = os.environ.get("AZURE_OPENAI_API_KEY")
+        endpoint = os.environ.get("AZURE_OPENAI_ENDPOINT")
+        api_version = os.environ.get("AZURE_OPENAI_API_VERSION")
+        
+        if not api_key:
+            return func.HttpResponse(
+                json.dumps({"error": "AZURE_OPENAI_API_KEY not found in environment variables"}),
+                status_code=500,
+                mimetype="application/json"
+            )
+        
+        if not endpoint:
+            return func.HttpResponse(
+                json.dumps({"error": "AZURE_OPENAI_ENDPOINT not found in environment variables"}),
+                status_code=500,
+                mimetype="application/json"
+            )
+        
+        # Test a simple API call
+        logging.info("Attempting test API call...")
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "user", "content": "Say 'Hello, AI is working!' and nothing else."}
+            ],
+            max_tokens=50,
+            temperature=0.1
+        )
+        
+        test_response = response.choices[0].message.content
+        logging.info(f"Test API call successful: {test_response}")
+        
+        return func.HttpResponse(
+            json.dumps({
+                "status": "success",
+                "message": "OpenAI configuration is working",
+                "test_response": test_response,
+                "config": {
+                    "endpoint_present": bool(endpoint),
+                    "api_key_present": bool(api_key),
+                    "api_version": api_version
+                }
+            }),
+            status_code=200,
+            mimetype="application/json"
+        )
+        
+    except Exception as e:
+        logging.error(f"Test failed: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({
+                "status": "error",
+                "error": str(e),
+                "error_type": type(e).__name__
+            }),
             status_code=500,
             mimetype="application/json"
         )
@@ -83,8 +231,11 @@ Keep recommendations practical and specific to this runner's level and patterns.
 """
     
     try:
-        response = openai.ChatCompletion.create(
-            engine="gpt-4",  # or your deployed model name
+        logging.info("Attempting to call OpenAI API...")
+        logging.info(f"Engine: gpt-4, Max tokens: 500, Temperature: 0.7")
+        
+        response = client.chat.completions.create(
+            model="gpt-4",  # or your deployed model name
             messages=[
                 {"role": "system", "content": "You are an expert running coach providing personalized advice."},
                 {"role": "user", "content": prompt}
@@ -93,11 +244,15 @@ Keep recommendations practical and specific to this runner's level and patterns.
             temperature=0.7
         )
         
+        logging.info("OpenAI API call successful!")
         ai_response = response.choices[0].message.content
+        logging.info(f"AI Response length: {len(ai_response)} characters")
+        logging.info(f"AI Response preview: {ai_response[:200]}...")
         
         # Parse JSON response
         try:
             coaching_data = json.loads(ai_response)
+            logging.info("Successfully parsed JSON response from AI")
         except json.JSONDecodeError:
             # Fallback if AI doesn't return valid JSON
             coaching_data = {
@@ -120,6 +275,10 @@ Keep recommendations practical and specific to this runner's level and patterns.
         
     except Exception as e:
         logging.error(f"Error calling OpenAI: {str(e)}")
+        logging.error(f"OpenAI Exception type: {type(e).__name__}")
+        import traceback
+        logging.error(f"OpenAI Full traceback: {traceback.format_exc()}")
+        
         # Return fallback recommendation
         return {
             "userId": user_id,
@@ -190,8 +349,8 @@ Make the plan realistic and achievable for this runner's current level.
 """
     
     try:
-        response = openai.ChatCompletion.create(
-            engine="gpt-4",  # or your deployed model name
+        response = client.chat.completions.create(
+            model="gpt-4",  # or your deployed model name
             messages=[
                 {"role": "system", "content": "You are an expert running coach creating personalized training plans."},
                 {"role": "user", "content": prompt}
