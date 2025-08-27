@@ -2,6 +2,9 @@
 
 A comprehensive Azure Functions backend API for the Run application, providing authentication, run tracking, social features, and AI coaching capabilities.
 
+Main Run app - https://github.com/Eranshh/Run
+Companion watch app - https://github.com/Tomer-Zur/Run-wearOS
+
 ## Overview
 
 This backend is built using Azure Functions with Python, providing a serverless API for the Run mobile and WearOS applications. It includes user management, run tracking, social features, and AI-powered coaching.
