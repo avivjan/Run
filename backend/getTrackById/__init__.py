@@ -51,6 +51,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         # Clean up entity for output
         track = {k: v for k, v in entity.items() if k not in ("PartitionKey", "RowKey", "etag")}
         track["trackId"] = entity["RowKey"]
+        
+        # Parse the path if it's a JSON string
+        if "path" in track and isinstance(track["path"], str):
+            try:
+                track["path"] = json.loads(track["path"])
+            except json.JSONDecodeError as e:
+                logging.error(f"Error parsing track path JSON: {e}")
+                track["path"] = []
 
         return func.HttpResponse(
             json.dumps(track),
